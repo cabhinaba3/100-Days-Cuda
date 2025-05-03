@@ -6,6 +6,24 @@
 #include <cuda_runtime.h>
 // #include "helper_cuda.h"
 
+/*
+
+// kernel definition
+__global void matAdd(float a[n][n], float b[n][n], float c[n][n]){
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.yl
+    if(i<n && j<n){
+        c[i][j]=a[i][j]+b[i][j];
+    }
+}
+int main(){
+    dim3 threadsPerBlock(16,16);
+    dim3 numBlocks(n / threadsPerBlock.x, n/threadPerBlock.y);
+    matAdd<<<numBlocks, threadPerBlock>>> (a,b,c);
+}
+
+// the thread block size of 16x16 is common choice.
+*/
 #define BLOCK_SIZE 16
 #define TILE_SIZE 16
 
@@ -14,15 +32,15 @@ struct Matrix{
     int width;
     float *elements;
 };
-#define CUDA_CHECK_ERROR(call)                                          \
-{                                                                   \
-    cudaError_t err = call;                                          \
-    if (err != cudaSuccess) {                                        \
-        std::cerr << "CUDA error at " << __FILE__ << ":" << __LINE__; \
-        std::cerr << " code=" << static_cast<int>(err)               \
-                    << " \"" << cudaGetErrorString(err) << "\"" << std::endl; \
-        exit(1);                                                    \
-    }                                                               \
+#define CUDA_CHECK_ERROR(call)
+{
+    cudaError_t err = call;                                          
+    if (err != cudaSuccess) {                                        
+        std::cerr << "CUDA error at " << __FILE__ << ":" << __LINE__; 
+        std::cerr << " code=" << static_cast<int>(err)               
+                    << " " << cudaGetErrorString(err) << " " << std::endl; 
+        exit(1);                                                    
+    }                                                               
 }
 void matrixMultiplicationCPU(const Matrix &A, const Matrix &B, Matrix &C){
     for(int i=0; i<A.height; ++i){
@@ -46,7 +64,7 @@ void printMatrix(Matrix X){
     for(int i=0;i<X.height * X.width;++i){
         printf("%f ",X.elements[i]);
     }
-    printf("\n");
+    printf("n");
 }
 // __global__ keyword is defined as a CUDA kernel
 // threads and blocks are indexed  using the built-in 3D variable : threadIdx, blockIdx
