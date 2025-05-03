@@ -12,13 +12,15 @@ At its core there are three key abstractions -  a hierarchy of thread groups, sh
 
 ## 100 Days of CUDA Challange
 
-### Day 1
-
-
 Day 1: Overall GPU Architecture, Vector Addition
 
 Day 2: Matrix Multiplication (Naive + Shared Memory)
+    Todo: Thread block clusters
 
 Day 3: Measureing Performance of a block
 
 Day 4: Matrix x Vector = Vector
+
+Day 5: Memory Hierarchy
+
+Note: All images are taken from CUDA porgramming Guide. This repo is used for Note taking and practising purposes only.
