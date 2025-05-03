@@ -1,5 +1,36 @@
 #include<stdio.h>
 #include<cuda_runtime.h>
+
+/*
+// kernel defintiions
+__global__ void vecAdd(float *A, float *B, float *C){
+    int index = threadIdx.x;
+    C[i] = A[i] + B[i];
+}
+
+int main(){
+    ...
+    // kernel invocation with N threads
+    vecAdd<<<1, N>>> (A,B,C);
+}
+Each of N threads that execute vecAdd() performs one pair-wise addition.
+*/
+
+/*
+// Kernel definition
+__global__ void matAdd(float a[n][n], float b[n][n], float c[n][n]){
+    int i = threadIdx.x;
+    int j = threadIdx.y;
+    c[i][j] = a[i][j] + b[i][j];
+}
+int main(){
+    // kernel invocation with one block of n * n * 1 threads
+    int numBlocks = 1;
+    dim3 threadsPerBlock(n,n);
+    matAdd<<<numBlocks, threadsPerBlock>>>(a,b,c)
+    // the number of thread blocks are limited to 1024(constant) as of now in 12.2
+}
+*/
 __global__ void vectorAdd(const float *A, const float *B, float *C, int numElements){
     int index = blockDim.x * blockIdx.x + threadIdx.x;
     if(index < numElements){

@@ -1,18 +1,26 @@
 # 100 Days of CUDA - Day 1 - Vector Additon
-Today I learned about Vector Addition
-# Cuda Program Structure
+CUDA C++ extends C++ by allowing the programmer to define C++ functions, called kernels. C++ Fucntions <==> CUDA C++ Kernels.
 
-```cudaMalloc``` allocates object in the device object memory. We need two parameters, Address of a pointer and the size of the allocated object in terms of bytes.
+A kernel is defined using ```__global__``` and the number of CUDA threads that execute the kernel for a given kernel call is specified using a new ```<<<...>>>```.
 
-```cudaFree``` frees object from device global memory which requires pointer to the freed object.
+Each thead has its own threadID that is accesible within the kernel through build-in variables(see code comment 1).
 
-## Grids
-Threads in the Grid are organized into two levels of hierarchy.  At the top level, each grid consists of one or more thread blocks. All blocks in a grid have the same number of threads. Each block has a unique two dimentional coordinate given by keywords, ```blockIdx.x``` and ```blockIdx.y```. The threads in the same block can cooperate with each other by synchronizing their excution (for hazard free shared memory access). They share data through a low latecy shared memory. Two threads from two different blocks cannot cooperate. 
+## Thread Hierarchy
+threadIdx is a 3-component vector, so that threads can be identified using one-dimentional, two-dimentional or three dimentional thread index, forming one dimentional, two/ three dimentional blocks of threads, called *thread block*.
 
-Each threads in a block is indentified by three indices, ```threadIdx.x```, ```threadIdx.y``` and ```threadIdx.z```
+The relation between index of a thread and threadID are as follows(see code comment 2),
+<ol>
+<li>For one dimentional block it is all the same</li>
+<li>For two dimentional block of size, (Dx,Dy), the thread index (x,y) is (x+yDx)</li>
+<li>For three dimentional block of size (Dx,DY,Dz), the thread IS of a thread index (x,y,z) is (x + yDx + z Dx Dy)</li>
+</ol>
 
-A thread in the matrix multiplication can be identified by,
+There is a limit to the number of threads in a block, since all threads of a block are expected to reside on the same streaming multiprocessor core and must share the limited memory resources of that core. On current GPUs, a thread block may contain upto ```1024``` threads.
 
-```threadId = blockIdx.x * blockDim.x + threadIdx```
+A kernel can be executed by multuple equally-shaped thread blocks.
+```
+Total threads = number of threads per block * number of blocks
+```
 
-```blockDim``` and ```gridDim``` provide the dimention of the grid and the dimension of each block respectively.
+Blocks are organised into 1/2/3-dimentional grid of thread-blocks.
+![Thread Blocks](../images/grid-of-thread-blocks.png)
