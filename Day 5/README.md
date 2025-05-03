@@ -21,5 +21,5 @@ Unified memory provides managed memory to bridge the host and device memory spac
 
 ![Heterogeneous Programming](../images/heterogeneous-programming.png)
 
-## Asynchronous SIM Programming Model
+## Asynchronous SIMT Programming Model
 An asynchronous operation is defined as an operation that is initiated by a CUDA thread and is executed asynchronously as-if by another thread. In a well formed program one or more CUDA threads synchronize with the asynchronous operation. The CUDA thread that initiated the asynchronous operation is not required to be among the synchronizing threads.
